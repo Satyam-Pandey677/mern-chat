@@ -1,8 +1,11 @@
 const bcrypt = require("bcrypt")
 const User = require("../models/userModel");
+const generateToken = require("../config/generateToken");
 
 const createUser = async(req, res) => {
     const {username, email,password,pic} = req.body;
+
+    console.log(password)
 
     if(!username && !email && !password){
         res.send("All Filds are required")
@@ -29,7 +32,8 @@ const createUser = async(req, res) => {
             _id:user._id,
             name:user.username,
             email:user.email,
-            pic:user.pic
+            pic:user.pic,
+            token:generateToken  (user._Id),
         })
     }else{
         res.status(400)
@@ -39,4 +43,19 @@ const createUser = async(req, res) => {
 }
 
 
-module.exports = {createUser}
+const auth = async(req, res) => {
+    const {email, password} = req.body;
+    const user = await User.findOne({email});
+    if(user && (await user.matchPassword(password)) ){
+        res.json({
+            _Id:user._Id,
+            name:user.name,
+            email:user.email,   
+            pic:user.pic,
+            token:generateToken(user._Id)
+        })
+    }
+}
+
+
+module.exports = {createUser, auth}
