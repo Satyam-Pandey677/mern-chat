@@ -5,7 +5,7 @@ const generateToken = require("../config/generateToken");
 const createUser = async(req, res) => {
     const {username, email,password,pic} = req.body;
 
-    console.log(password)
+    console.log(username, email, password);
 
     if(!username && !email && !password){
         res.send("All Filds are required")
