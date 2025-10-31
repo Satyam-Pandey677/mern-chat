@@ -5,8 +5,6 @@ const generateToken = require("../config/generateToken");
 const createUser = async(req, res) => {
     const {username, email,password,pic} = req.body;
 
-    console.log(username, email, password);
-
     if(!username && !email && !password){
         res.send("All Filds are required")
     }
@@ -48,14 +46,30 @@ const auth = async(req, res) => {
     const user = await User.findOne({email});
     if(user && (await user.matchPassword(password)) ){
         res.json({
-            _Id:user._Id,
-            name:user.name,
+            _Id:user._id,
+            username:user.username,
             email:user.email,   
             pic:user.pic,
-            token:generateToken(user._Id)
+            token:generateToken(user._id)
         })
     }
 }
 
+const allUser =async (req, res) => {
+    try {
+        const keyword = req.query.search ? {
+            $or:[
+                {username : {$regex: req.query.search, $options:"i"}},
+                {email:{$regex:req.query.search,$options:"i"}},
+            ]
+        }:{};
+        const users = await User.find(keyword).find({_id: {$ne: req.user._id}})
 
-module.exports = {createUser, auth}
+        res.send(users)
+    } catch (error) {
+        throw new Error("Somthing goes off",  error.message)
+    }
+}
+
+
+module.exports = {createUser, auth, allUser}

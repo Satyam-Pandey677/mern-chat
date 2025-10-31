@@ -3,6 +3,7 @@ const chats = require("./data/data.js");
 const connectDb = require("./config/db.js");
 const userRouter = require("./routers/userRouter.js");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
+const chatRouter = require("./routers/chatRouter.js");
 
 const app = express();
 const port = process.env.PORT|| 8000;
@@ -11,7 +12,9 @@ app.use(express.json())
 
 connectDb();
 
+
 app.use("/api/user",userRouter)
+app.use("/api/chat",chatRouter)
 
 
 app.use(notFound)
