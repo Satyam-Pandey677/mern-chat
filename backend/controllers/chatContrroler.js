@@ -70,19 +70,17 @@ const fetchChats = async(req, res) => {
 
 
 const createGroupChat = async(req, res) => {
-    if(!req.body.users || !req.body.username){
+    if(!req.body.users || !req.body.name){
         return res.status(400).send({message:"Please Fill all fields"});
     }
 
-    var user  = JSON.parse(req.body.users);
 
-    if(user.length < 2){
+    var users  = JSON.parse(req.body.users);
+    if(users.length < 2){
         return res
         .status(400)
         .send("more than 2  users required to form a group chat")
     }
-
-    user.push(req.user);
 
     try {
         const groupChat = await Chat.create({
@@ -103,4 +101,20 @@ const createGroupChat = async(req, res) => {
     }
 }
 
-module.exports = {accessChat, fetchChats, createGroupChat}
+const renameGroup =async (req, res) => {
+    const {chatId, chatName} = req.body;
+
+    const updatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            chatName
+        },{
+            new:true
+        }
+    ).populate("users", "-possword")
+    .populate("groupAdmin", "-password");
+
+
+}
+
+module.exports = {accessChat, fetchChats, createGroupChat, renameGroup}
