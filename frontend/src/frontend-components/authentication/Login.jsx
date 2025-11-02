@@ -1,3 +1,4 @@
+
 import { toaster } from "../../components/ui/toaster";
 import {
   Button,
@@ -9,15 +10,12 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
-
-
-  const navigate = useNavigate();
 
   const submitHandler = async() => {
     setLoading(true);
@@ -48,7 +46,6 @@ const Login = () => {
         closable:true
       })
 
-      console.log(data),
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
@@ -57,6 +54,8 @@ const Login = () => {
 
     } catch (error) {}
   };
+
+ 
 
   return (
     <VStack spacing="5px" p="10px">

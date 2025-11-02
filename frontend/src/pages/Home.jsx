@@ -1,9 +1,20 @@
+import { useNavigate } from "react-router-dom";
+import { ChatState } from "../context/chatProvider.jsx";
 import Login from "../frontend-components/authentication/Login.jsx";
 import SignUp from "../frontend-components/authentication/SignUp.jsx";
 import { Box, Container, Tabs, Text } from "@chakra-ui/react";
 import React from "react";
 
 const Home = () => {
+
+
+   const {user} = ChatState();
+   const navigate = useNavigate()
+    if(user){
+      navigate("/chats")
+    }
+  
+
   return (
     <Container maxWidth="xl" centerContent>
       <Box
