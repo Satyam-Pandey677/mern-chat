@@ -114,7 +114,12 @@ const renameGroup =async (req, res) => {
     ).populate("users", "-possword")
     .populate("groupAdmin", "-password");
 
-
+    if(!updatedChat){
+        res.status(400)
+        throw new Error("CHat Not Found")
+    }else{
+        res.json(updatedChat)
+    }
 }
 
 module.exports = {accessChat, fetchChats, createGroupChat, renameGroup}
