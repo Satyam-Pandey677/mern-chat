@@ -17,7 +17,7 @@ const ProfileModal = ({ user }) => {
       <Dialog.Root>
         <Dialog.Trigger asChild>
           <Button variant="ghost" focusRingWidth="none">
-            My Profile
+            Profile
           </Button>
         </Dialog.Trigger>
 

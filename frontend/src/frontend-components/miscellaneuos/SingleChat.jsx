@@ -13,6 +13,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   return (
     <>
       {selectedChat ? (
+        <>
         <Text
           fontSize={{ base: "28px", md: "30px" }}
           pb={3}
@@ -50,6 +51,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )
           }
         </Text>
+        <Box
+            display="flex"
+            justifyContent="flex-end"
+            flexDir="column"
+            p={3}
+            width="100%"
+            height="100%"
+            borderRadius="lg"
+            overflow="hidden"
+        >
+            {/* Message Here     */} 
+        </Box>
+        </>
+
       ) : (
         <Box
           display="flex"
