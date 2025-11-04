@@ -12,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaAngleDown, FaArrowDown, FaBell } from "react-icons/fa";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChatState } from "../../context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
@@ -83,12 +83,14 @@ const SideDrawer = () => {
       };
       const data= await axios.post("/api/chat", {userId}, config)
 
+      if(!chats.find((c) => c._id === data._id))setChats([data,...chats])
+
       setSelectedChat(data)
       setLoadingChat(false)
     } catch (error) {
       console.log(error)
     }
-  }
+  } 
 
   return (
     <>

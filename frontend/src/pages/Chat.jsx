@@ -9,7 +9,6 @@ import ChatBox from '../frontend-components/miscellaneuos/ChatBox.jsx';
 const Chat = () => {
 
   const {user} = ChatState()
-  console.log(user)
 
   return (
     <div style={{width: "100%"}}>
