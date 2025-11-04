@@ -16,8 +16,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         <>
         <Text
           fontSize={{ base: "28px", md: "30px" }}
-          pb={3}
-          px={2}
+          padding={5}
           width="100%"
           fontFamily="Work sans"
           display="flex"
@@ -56,8 +55,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent="flex-end"
             flexDir="column"
             p={3}
-            width="100%"
-            height="100%"
+            background="#14213d"
+            width="95%"
+            height="86%"
             borderRadius="lg"
             overflow="hidden"
         >
