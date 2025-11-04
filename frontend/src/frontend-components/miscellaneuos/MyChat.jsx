@@ -7,7 +7,7 @@ import ChatLoading from "../ChatLoading";
 import { getSender } from "../../config/chatLogic";
 import GroupChatModel from "./GroupChatMOdel";
 
-const MyChat = () => {
+const MyChat = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState();
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
 
@@ -22,14 +22,14 @@ const MyChat = () => {
       const { data } = await axios.get("/api/chat", config);
       setChats(data);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
