@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 
 const ProfileModal = ({ user }) => {
-  console.log(user);
 
   return (
     <HStack wrap="wrap" gap="4">
@@ -35,9 +34,9 @@ const ProfileModal = ({ user }) => {
                   display="flex"
                   justifyContent="center"
               >
-                <Dialog.Title>
+                <Text fontSize="2xl" fontWeight="semibold">
                   {user.username}
-                </Dialog.Title>
+                </Text>
               </Dialog.Header>
 
               <Dialog.Body

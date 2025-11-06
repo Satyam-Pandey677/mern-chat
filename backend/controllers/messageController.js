@@ -28,11 +28,10 @@ const sendMessages = async(req, res) => {
             select:"name pic email"
         })
 
-        const updatedMessage = await Chat.findByIdAndUpdate(req.body.chatId,{
+         await Chat.findByIdAndUpdate(req.body.chatId,{
             latestMessage: message
         })
 
-        console.log(updatedMessage)
 
         res.json(message)
 
@@ -45,7 +44,6 @@ const sendMessages = async(req, res) => {
 }
 
 const allMessages = async(req,res) => {
-    console.log(req.params.chatId)
     try {
         const message = await Message.find({
             chat:req.params.chatId

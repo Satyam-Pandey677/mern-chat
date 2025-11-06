@@ -9,7 +9,7 @@ import ChatBox from "../frontend-components/miscellaneuos/ChatBox.jsx";
 const Chat = () => {
   const { user } = ChatState();
   const [fetchAgain, setFetchAgain] = useState(false);
-  console.log(fetchAgain)
+
 
   return (
     <div style={{ width: "100%" }}>

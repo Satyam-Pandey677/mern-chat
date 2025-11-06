@@ -17,7 +17,7 @@ import { data } from "react-router-dom";
 import UserListItem from "../UserAvatar/UserListItem";
 import ChatLoading from "../ChatLoading";
 
-const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
   const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
@@ -45,6 +45,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
       );
       console.log(data);
       setFetchAgain(!fetchAgain)
+      fetchMessages()
       setLoading(false);
     } catch (error) {
       console.log(error);
