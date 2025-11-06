@@ -20,6 +20,7 @@ const MyChat = ({fetchAgain}) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
+      console.log(data)
       setChats(data);
     } catch (error) {
       console.log(error.message);
@@ -30,6 +31,8 @@ const MyChat = ({fetchAgain}) => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
   }, [fetchAgain]);
+
+  console.log(chats)
 
   return (
     <Box
@@ -86,7 +89,7 @@ const MyChat = ({fetchAgain}) => {
               >
                 <Text>
                   {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
+                    ? getSender(loggedUser.data, chat.users)
                     : chat.chatName}
                 </Text>
               </Box>

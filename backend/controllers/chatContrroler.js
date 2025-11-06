@@ -3,7 +3,6 @@ const User = require("../models/userModel.js");
 
 const accessChat = async (req, res) => {
   const { userId } = req.body;
-  console.log(userId);
 
   if (!userId) {
     console.log("UserId param not sent with request");
@@ -49,22 +48,21 @@ const accessChat = async (req, res) => {
   }
 };
 
-const fetchChats = async (req, res) => {
-  try {
-    Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-      .populate("users", "-passwors")
-      .populate("groupAdmin", "-password")
-      .populate("latestMessage")
-      .sort({ updatedAt: -1 })
-      .then(async (results) => {
+  const fetchChats = async (req, res) => {
+    try {
+      let results =  await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+        .populate("latestMessage")
+        .sort({ updatedAt: -1 })
+
         results = await User.populate(results, {
-          path: "latestMessage.sender",
-          select: "name pic email",
-        });
-        res.status(200).send(results);
-      });
-  } catch (error) {}
-};
+            path: "latestMessage.sender",
+            select: "name pic email",})
+
+          res.status(200).send(results);
+    } catch (error) {}
+  };
 
 const createGroupChat = async (req, res) => {
   if (!req.body.users || !req.body.name) {
@@ -78,6 +76,7 @@ const createGroupChat = async (req, res) => {
       .send("more than 2  users required to form a group chat");
   }
 
+  users.push(req.user)
   try {
     const groupChat = await Chat.create({
       chatName: req.body.name,
