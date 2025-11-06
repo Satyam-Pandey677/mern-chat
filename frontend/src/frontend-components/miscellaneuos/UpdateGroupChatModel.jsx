@@ -26,6 +26,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
   const [renameLoading, setRenameLoading] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState()
 
+
   const handleRemove = async (chatId, userId) => {
     console.log(chatId, userId);
 
@@ -43,6 +44,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
         config
       );
       console.log(data);
+      setFetchAgain(!fetchAgain)
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -52,6 +54,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
   const handleRenameGroup = async (selectedChat) => {
 
     try {
+      setRenameLoading(true)
       if (selectedChat.groupAdmin._id === user.data._Id) {
         const config = {
           headers: {
@@ -62,7 +65,9 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
           chatId:selectedChat._id,
           chatName: groupChatName
          }, config)
-  
+         
+         setRenameLoading(false)
+         setFetchAgain(!fetchAgain)
         console.log(data)
     }else{
       console.log("You not a Group Admin")
@@ -114,6 +119,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
          }, config)
   
         console.log(data)
+        setFetchAgain(!fetchAgain)
     }else{
       console.log("You not a Group Admin")
     }
@@ -157,7 +163,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
                       placeholder="Enter New Group Name"
                       onChange={(e) => setGroupChatName(e.target.value)}
                     />
-                    <Button  onClick={() => handleRenameGroup(selectedChat)}>Update</Button>
+                    <Button type="submit"  onClick={() => handleRenameGroup(selectedChat)}>Update</Button>
                     </Box>
                   </Field.Root>
                   <Field.Root>
