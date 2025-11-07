@@ -41,4 +41,26 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
     console.log("Connected To socket.io")
+
+    socket.on("setup", (userData) => {
+        socket.join(userData._Id);
+        socket.emit("connected")
+    })
+
+    socket.on('join chat', (room) =>{
+        socket.join(room);
+        console.log("user join room "+ room)
+    })
+
+    socket.on("new message", (newMessageReceived) => {
+        var chat = newMessageReceived.chat
+        console.log(newMessageReceived)
+        if(!chat.users) return console.log("Chat.users not defined");
+
+        chat.users.forEach(user => {
+            if(user._id == newMessageReceived.sender._id) return;
+            
+            socket.in(user._id).emit("message recieved", newMessageReceived)
+        })
+    })
 })

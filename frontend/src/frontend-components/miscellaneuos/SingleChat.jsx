@@ -29,12 +29,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
+  const [socketConnected, setSocketConnected] = useState(false)
 
   const { user, setSelectedChat, selectedChat } = ChatState();
 
-  useEffect(()=> {
-    fetchMessage()
-  },[selectedChat])
  
   const fetchMessage = async () => {
     if(!selectedChat) return;
@@ -51,6 +49,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       
       setMessages(data)
       setLoading(false)
+
+      socket.emit("join chat", selectedChat._id)
     } catch (error) {
         console.log(error)
     }
@@ -75,7 +75,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-        console.log(data);
+        
+        socket.emit("new message", data)
 
         setMessages([...messages, data]);
       } catch (error) {
@@ -90,9 +91,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     // Typing Indicator Logic
   };
 
+  useEffect(()=> {
+    fetchMessage()
+
+    selectedChatCompare = selectedChat;
+
+  },[selectedChat])
+
   useEffect(() => {
     socket = io(ENDPOINT)
+    socket.emit("setup", user.data)
+    socket.on("connection", () => setSocketConnected(true))
   },[])
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if(!selectedChat || selectedChatCompare._id !== newMessageRecieved){
+        //give NOtifications
+      }else{
+        console.log(newMessageRecieved)
+        setMessages([...messages, newMessageRecieved])
+      }
+    })
+  })
 
 
   return (
