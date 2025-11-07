@@ -4,25 +4,16 @@ import { ChatState } from "../context/ChatProvider";
 import { Avatar, Box, IconButton, ScrollArea, VStack } from "@chakra-ui/react";
 import { LuArrowDown } from "react-icons/lu";
 import { Tooltip } from "../components/ui/tooltip";
-import { useScrollToBottom } from "react-scroll-to-bottom";
+import ScrollToBottom from "react-scroll-to-bottom";
+import "./style.css"
+// import { useScrollToBottom } from "react-scroll-to-bottom";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
 
-  const sticky = useScrollToBottom();
-
   return (
     <>
-      <ScrollArea.Root
-        maxHeight="20rem"
-        width="full"
-        borderWidth="1px"
-        rounded="l2"
-        size="xs"
-      >
-        <ScrollArea.Viewport ref={sticky.scrollRef}>
-          <ScrollArea.Content ref={sticky.contentRef}>
-            <VStack gap="2" p="3" align="stretch">
+        <ScrollToBottom className="scrollable-chat">
               {messages &&
                 messages.map((m, i) => (
                   <div style={{ display: "flex" }} key={m._id}>
@@ -38,22 +29,20 @@ const ScrollableChat = ({ messages }) => {
 
                     <span style={{
                       background: `${
-                        m.sender._id === user.data._Id ? "#BEE3F8*":"#B9F5D0"
+                        m.sender._id === user.data._Id ? "#BEE3F8":"#B9F5D0"
                       }`,
+                      color:"black",
                       borderRadius:"20px",
                       padding:"5px 15px",
                       maxWidth:"75%",
                       marginLeft:isSameSenderMargin(messages, m, i, user.data._Id),
+                      marginBottom:"10px"
                     }}> 
                       {m.content}
                     </span>
                   </div>
                 ))}
-            </VStack>
-          </ScrollArea.Content>
-        </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar />
-      </ScrollArea.Root>
+        </ScrollToBottom>
     </>
   );
 };

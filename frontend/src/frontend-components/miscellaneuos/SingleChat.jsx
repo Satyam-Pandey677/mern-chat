@@ -19,6 +19,11 @@ import UpdateGroupChatModel from "./UpdateGroupChatModel";
 import axios from "axios";
 import "../style.css"
 import ScrollableChat from "../ScrollableChat";
+import { io } from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000"
+
+var socket, selectedChatCompare
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -84,6 +89,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     // Typing Indicator Logic
   };
+
+  useEffect(() => {
+    socket = io(ENDPOINT)
+  },[])
+
+
   return (
     <>
       {selectedChat ? (

@@ -6,6 +6,6 @@
 }
 
 .scrollable-chat {
-  height: 70vh;
+  height:100%;
   overflow: auto;
 }

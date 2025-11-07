@@ -21,6 +21,20 @@ app.use("/api/message",messageRouter)
 
 app.use(notFound)
 app.use(errorHandler)
-app.listen(port,() => {
+
+
+const server = app.listen(port,() => {
     console.log("server runnning in port: ",port)
+})
+
+const io = require("socket.io")(server, {
+    pingTimeout:60000,
+    cors:{
+        origin:"http://localhost:5173",
+        method:["GET", "POST", "UPDATE", "PUT"],
+    }
+})
+
+io.on("connection", (socket) => {
+    console.log("Connected To socket.io")
 })
