@@ -30,8 +30,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const [socketConnected, setSocketConnected] = useState(false)
+  const [typing, setTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
 
   const { user, setSelectedChat, selectedChat } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    socket.emit("setup", user.data)
+    socket.on("connected", () => setSocketConnected(true))
+    socket.on("typing", () => setIsTyping(true))
+    socket.on("stop typing", () => setIsTyping(false))
+  },[])
 
  
   const fetchMessage = async () => {
@@ -58,6 +68,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
+      socket.emit("stop typing",selectedChat._id)
       try {
         const config = {
           headers: {
@@ -89,6 +100,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setNewMessage(e.target.value);
 
     // Typing Indicator Logic
+
+    if(!socketConnected) return;
+
+    if(!typing) {
+      setTyping(true)
+      socket.emit("typing", selectedChat._id);
+
+    }
+
+    let lastTypingTime = new Date().getTime()
+
+    var timerLength = 3000
+
+    setTimeout(() => {
+      var timeNow = new Date().getTime()
+      var timeDeff= timeNow -lastTypingTime
+
+      if(timeDeff >= timerLength && typing){
+        socket.emit("stop typing", selectedChat._id)
+        setTyping(false)
+      }
+     },timerLength)
   };
 
   useEffect(()=> {
@@ -98,18 +131,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   },[selectedChat])
 
-  useEffect(() => {
-    socket = io(ENDPOINT)
-    socket.emit("setup", user.data)
-    socket.on("connection", () => setSocketConnected(true))
-  },[])
+  
 
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
-      if(!selectedChat || selectedChatCompare._id !== newMessageRecieved){
+      console.log(newMessageRecieved)
+      if(!selectedChat || selectedChatCompare._id !== newMessageRecieved.chat._id){
         //give NOtifications
       }else{
-        console.log(newMessageRecieved)
+        console.log(messages)
         setMessages([...messages, newMessageRecieved])
       }
     })
@@ -182,6 +212,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
 
             <Field.Root onKeyDown={sendMessage}>
+              {isTyping? <div>Loading...</div>: <></>}
               <Input
                 placeholder="Enter the message"
                 variant="outline"

@@ -42,7 +42,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
     console.log("Connected To socket.io")
 
-    socket.on("setup", (userData) => {
+    socket.on("setup", (userData) => {   
         socket.join(userData._Id);
         socket.emit("connected")
     })
@@ -52,15 +52,24 @@ io.on("connection", (socket) => {
         console.log("user join room "+ room)
     })
 
+    socket.on("typing", (room) => {
+        socket.in(room).emit("typing")
+    });
+
+
+    socket.on("stop typing", (room) => {
+        console.log("stop typing")
+        socket.in(room).emit("stop typing")
+    })
+
     socket.on("new message", (newMessageReceived) => {
         var chat = newMessageReceived.chat
-        console.log(newMessageReceived)
         if(!chat.users) return console.log("Chat.users not defined");
 
         chat.users.forEach(user => {
             if(user._id == newMessageReceived.sender._id) return;
             
-            socket.in(user._id).emit("message recieved", newMessageReceived)
+            socket.in(user._id).emit("message recieved",newMessageReceived)
         })
     })
 })
