@@ -20,6 +20,7 @@ import { toaster } from "../../components/ui/toaster";
 import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
+import { getSender } from "../../config/chatLogic";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -27,7 +28,7 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
-  const { user, setSelectedChat, chats, setChats } = ChatState();
+  const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -58,7 +59,6 @@ const SideDrawer = () => {
       const { data } = await axios.get(`/api/user?search=${search}`, config);
 
       setLoading(false);
-      console.log(data)
       setSearchResult(data);
     } catch (error) {
       toaster.create({
@@ -178,8 +178,20 @@ const SideDrawer = () => {
             </Menu.Trigger>
             <Portal>
               <Menu.Positioner>
-                <Menu.Content>
-                  <Menu.Item value="new-txt-a">
+                <Menu.Content p={2} bg={"gray"}>
+
+                  {!notification.length && "No New Messages"}
+
+                  {notification.map(notif =>{ 
+                    console.log( user.data._Id)
+                    return(
+                    <Menu.Item key={notif._id} value="new-txt-a">
+                    {notif.chat.isGroupChat? `New Message In ${notif.chat.chatName}`:
+                     `New Message from ${getSender(user.data, notif.chat.users)}`
+                    }
+                  </Menu.Item>
+                  )})}
+                  {/* <Menu.Item value="new-txt-a">
                     New Text File <Menu.ItemCommand>⌘E</Menu.ItemCommand>
                   </Menu.Item>
                   <Menu.Item value="new-file-a">
@@ -193,7 +205,7 @@ const SideDrawer = () => {
                   </Menu.Item>
                   <Menu.Item value="export-a">
                     Export <Menu.ItemCommand>⌘S</Menu.ItemCommand>
-                  </Menu.Item>
+                  </Menu.Item> */}
                 </Menu.Content>
               </Menu.Positioner>
             </Portal>
