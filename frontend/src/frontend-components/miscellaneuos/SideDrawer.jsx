@@ -173,7 +173,8 @@ const SideDrawer = () => {
                 marginRight="10px"
                 size="md"
               >
-                <FaBell />
+                
+                <FaBell /> {notification.length}
               </IconButton>
             </Menu.Trigger>
             <Portal>
@@ -185,7 +186,10 @@ const SideDrawer = () => {
                   {notification.map(notif =>{ 
                     console.log( user.data._Id)
                     return(
-                    <Menu.Item key={notif._id} value="new-txt-a">
+                    <Menu.Item key={notif._id} onClick={() => {
+                      setSelectedChat(notif.chat)
+                      setNotification(notification.filter((n) => n !== notif))
+                    }}>
                     {notif.chat.isGroupChat? `New Message In ${notif.chat.chatName}`:
                      `New Message from ${getSender(user.data, notif.chat.users)}`
                     }
