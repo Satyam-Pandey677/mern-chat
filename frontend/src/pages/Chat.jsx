@@ -1,8 +1,7 @@
 import SideDrawer from "../frontend-components/miscellaneuos/SideDrawer.jsx";
 import { ChatState } from "../context/chatProvider";
-import { Box, Text } from "@chakra-ui/react";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { Box } from "@chakra-ui/react";
+import React, { useState } from "react";
 import MyChat from "../frontend-components/miscellaneuos/MyChat.jsx";
 import ChatBox from "../frontend-components/miscellaneuos/ChatBox.jsx";
 
