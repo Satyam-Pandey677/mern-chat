@@ -6,7 +6,6 @@ import Chat from './pages/Chat'
 import AuthChecker from './frontend-components/AuthChecker'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className='App'>

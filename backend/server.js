@@ -1,5 +1,4 @@
 const express = require("express");
-const chats = require("./data/data.js");
 const connectDb = require("./config/db.js");
 const userRouter = require("./routers/userRouter.js");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
